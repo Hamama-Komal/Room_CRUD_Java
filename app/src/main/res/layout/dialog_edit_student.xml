@@ -17,5 +17,19 @@
         android:layout_height="wrap_content"
         android:hint="Email" />
 
+    <EditText
+        android:id="@+id/editTextSemester"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Semester" />
+
+    <EditText
+        android:id="@+id/editTextDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Department" />
+
+
+
 
 </LinearLayout>

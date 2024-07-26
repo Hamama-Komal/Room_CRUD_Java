@@ -50,10 +50,14 @@ public class MainActivity extends AppCompatActivity{
 
 
         binding.buttonInsert.setOnClickListener(v ->{
+
             String name = binding.editTexName.getText().toString().trim();
             String email = binding.editTextEmail.getText().toString().trim();
+            String semester = binding.editTextSemester.getText().toString().trim();
+            String department = binding.editTextDepartment.getText().toString().trim();
 
-            Student student = new Student(0, name, email);
+
+            Student student = new Student(0, name, email, semester, department);
             recyclerAdapter.addStudent(student);
             studentDao.insert(student);
             Toast.makeText(this, "Data Inserted", Toast.LENGTH_SHORT).show();
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity{
 
             binding.editTexName.setText("");
             binding.editTextEmail.setText("");
+            binding.editTextSemester.setText("");
+            binding.editTextDepartment.setText("");
         });
 
     }

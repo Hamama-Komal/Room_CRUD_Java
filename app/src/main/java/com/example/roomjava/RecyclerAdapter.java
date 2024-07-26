@@ -19,11 +19,10 @@ import com.example.roomjava.room.StudentDb;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private Context context;
-    private  List<Student> studentList;
+    private List<Student> studentList;
     public StudentDao studentDao;
 
     public RecyclerAdapter(Context context) {
@@ -55,6 +54,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public void updateStudent(Student student) {
+        int index = -1;
+        for (int i = 0; i < studentList.size(); i++) {
+            if (studentList.get(i).getId() == student.getId()) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) {
+            studentList.set(index, student);
+            notifyItemChanged(index);
+        }
+    }
+
     public void updateStudentList(List<Student> students) {
         this.studentList = students;
         notifyDataSetChanged();
@@ -76,16 +89,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public void bind(Student item) {
             binding.textViewName.setText(item.getName());
             binding.textViewEmail.setText(item.getEmail());
+            binding.textViewDepartment.setText(item.getDepartment());
+            binding.textViewSemester.setText(item.getSemester());
 
-            // Set click listeners for edit and delete buttons if needed
-            binding.edit.setOnClickListener(v -> {
-                showEditDialog(item);
-            });
-
-            binding.delete.setOnClickListener(v -> {
-
-                showDeleteConfirmationDialog(item.getId());
-            });
+            binding.edit.setOnClickListener(v -> showEditDialog(item));
+            binding.delete.setOnClickListener(v -> showDeleteConfirmationDialog(item));
         }
 
         private void showEditDialog(Student student) {
@@ -96,36 +104,46 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             EditText editTextName = dialogView.findViewById(R.id.editTextName);
             EditText editTextEmail = dialogView.findViewById(R.id.editTextEmail);
+            EditText editTextSemester = dialogView.findViewById(R.id.editTextSemester);
+            EditText editTextDepartment = dialogView.findViewById(R.id.editTextDepartment);
+
             editTextName.setText(student.getName());
             editTextEmail.setText(student.getEmail());
+            editTextSemester.setText(student.getSemester());
+            editTextDepartment.setText(student.getDepartment());
 
             builder.setTitle("Edit Student")
                     .setPositiveButton("Update", (dialog, which) -> {
                         String newName = editTextName.getText().toString().trim();
                         String newEmail = editTextEmail.getText().toString().trim();
+                        String newSemester = editTextSemester.getText().toString().trim();
+                        String newDepartment = editTextDepartment.getText().toString().trim();
+
                         student.setName(newName);
                         student.setEmail(newEmail);
+                        student.setSemester(newSemester);
+                        student.setDepartment(newDepartment);
+
                         studentDao.update(student);
-                        updateStudentList(studentDao.getAllStudents());
+                        updateStudent(student);
                         Toast.makeText(itemView.getContext(), "Student updated", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         }
 
-        private void showDeleteConfirmationDialog(int position) {
+        private void showDeleteConfirmationDialog(Student student) {
             new AlertDialog.Builder(itemView.getContext())
                     .setTitle("Delete Student")
                     .setMessage("Are you sure you want to delete this student?")
                     .setPositiveButton("OK", (dialog, which) -> {
-                        studentDao.delete(position);
-                        updateStudentList(studentDao.getAllStudents());
+                        studentDao.delete(student.getId());
+                        studentList.remove(student);
+                        notifyDataSetChanged();
                         Toast.makeText(itemView.getContext(), "Student deleted", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         }
-
     }
-
 }

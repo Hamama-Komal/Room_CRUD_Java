@@ -50,6 +50,22 @@
                 android:hint="Student Email"
                 android:inputType="textEmailAddress" />
 
+            <EditText
+                android:id="@+id/editTextSemester"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Current Semester"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/editTextDepartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Department"
+                android:inputType="textEmailAddress" />
+
             <Button
                 android:id="@+id/buttonInsert"
                 android:layout_width="match_parent"
@@ -57,6 +73,7 @@
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/black"
                 android:text="Insert Data" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
